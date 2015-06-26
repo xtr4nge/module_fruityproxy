@@ -115,7 +115,7 @@ include "includes/options_config.php";
 
 <div class="rounded-top" align="left"> &nbsp; <?=$mod_alias?> </div>
 <div class="rounded-bottom">
-  <form name="us_mode" style="margin=0px" action="index.php" method="POST">
+
     &nbsp;&nbsp;&nbsp;&nbsp; version <?=$mod_version?><br>
     <? 
     if (file_exists("includes/FruityProxy-master/fruityproxy.py")) { 
@@ -134,16 +134,6 @@ include "includes/options_config.php";
         echo "&nbsp;$mod_alias  <font color=\"red\"><b>disabled</b></font>. | <a href=\"includes/module_action.php?service=mitmf&action=start&page=module\"><b>start</b></a>"; 
     }
     ?>
-
-    <select name="proxy" class="module" onchange='this.form.submit()' <?=$disabled?> >
-        <option value="-" <? if ($us_mode == "-") echo "selected"?> >-</option>
-        <option value="sslstrip2" <? if ($us_mode == "sslstrip2") echo "selected"?> >SSLstrip2</option>
-        <option value="sslstrip" <? if ($us_mode == "sslstrip") echo "selected"?> >SSLstrip</option>
-        <option value="mitmf" <? if ($us_mode == "mitmf") echo "selected"?> >MITMf</option>
-    </select>
-
-    <input type="hidden" name="change_mode" value="1">
-  </form>
 
 </div>
 
