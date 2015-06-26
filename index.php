@@ -116,12 +116,12 @@ include "includes/options_config.php";
 <div class="rounded-top" align="left"> &nbsp; <?=$mod_alias?> </div>
 <div class="rounded-bottom">
   <form name="us_mode" style="margin=0px" action="index.php" method="POST">
-    &nbsp;&nbsp;&nbsp;version <?=$mod_version?><br>
+    &nbsp;&nbsp;&nbsp;&nbsp; version <?=$mod_version?><br>
     <? 
     if (file_exists("includes/FruityProxy-master/fruityproxy.py")) { 
-        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$mod_alias <font style='color:lime'>installed</font><br>";
+        echo "&nbsp;$mod_alias <font style='color:lime'>installed</font><br>";
     } else {
-        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$mod_alias <a href='includes/module_action.php?install=install_$mod_name' style='color:red'>install</a><br>";
+        echo "&nbsp;$mod_alias <a href='includes/module_action.php?install=install_$mod_name' style='color:red'>install</a><br>";
     } 
     ?>
 
@@ -129,9 +129,9 @@ include "includes/options_config.php";
     $ismodup = exec($mod_isup);
     if ($ismodup != "") {
         $disabled = "disabled";
-        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$mod_alias <font color=\"lime\"><b>enabled</b></font>.&nbsp; | <a href=\"includes/module_action.php?service=mitmf&action=stop&page=module\"><b>stop</b></a>";
+        echo "&nbsp;$mod_alias <font color=\"lime\"><b>enabled</b></font>.&nbsp; | <a href=\"includes/module_action.php?service=mitmf&action=stop&page=module\"><b>stop</b></a>";
     } else { 
-        echo "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;$mod_alias  <font color=\"red\"><b>disabled</b></font>. | <a href=\"includes/module_action.php?service=mitmf&action=start&page=module\"><b>start</b></a>"; 
+        echo "&nbsp;$mod_alias  <font color=\"red\"><b>disabled</b></font>. | <a href=\"includes/module_action.php?service=mitmf&action=start&page=module\"><b>start</b></a>"; 
     }
     ?>
 

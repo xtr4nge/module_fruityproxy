@@ -80,14 +80,14 @@ if ($type == "opt_value") {
 if ($type == "config") {
 
     if ($newdata != "") { $newdata = ereg_replace(13,  "", $newdata);
-        $exec = "$bin_echo '$newdata' | base64 --decode > $mod_path/includes/fruityproxy/fruityproxy.conf";
+        $exec = "$bin_echo '$newdata' | base64 --decode > $mod_path/includes/FruityProxy-master/fruityproxy.conf";
         exec_fruitywifi($exec);
         
         $exec = "$bin_dos2unix $mod_path/includes/fruityproxy/fruityproxy.conf";
         exec_fruitywifi($exec);
     }
 
-    header('Location: ../index.php?tab=3');
+    header('Location: ../index.php?tab=2');
     exit;
 
 }
@@ -95,14 +95,14 @@ if ($type == "config") {
 if ($type == "inject") {
 
     if ($newdata != "") { $newdata = ereg_replace(13,  "", $newdata);
-        $exec = "$bin_echo '$newdata' | base64 --decode > $mod_path/includes/fruityproxy/content/InjectHTML/inject.txt";
+        $exec = "$bin_echo '$newdata' | base64 --decode > $mod_path/includes/FruityProxy-master/content/InjectHTML/inject.txt";
         exec_fruitywifi($exec);
         
-        $exec = "$bin_dos2unix $mod_path/includes/fruityproxy/content/InjectHTML/inject.txt";
+        $exec = "$bin_dos2unix $mod_path/includes/FruityProxy-master/content/InjectHTML/inject.txt";
         exec_fruitywifi($exec);
     }
 
-    header('Location: ../index.php?tab=4');
+    header('Location: ../index.php?tab=3');
     exit;
 
 }
