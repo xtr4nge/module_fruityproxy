@@ -4,6 +4,7 @@ echo "installing FruityProxy..."
 
 apt-get -y install python-pip
 apt-get -y install build-essential python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev
+apt-get -y install python-configobj
 apt-get -y install python-setuptools --reinstall
 
 pip install --upgrade setuptools
