@@ -8,10 +8,12 @@ pip install --upgrade six
 
 #https://pypi.python.org/packages/source/u/urwid/urwid-1.3.0.tar.gz # if error, install urwid manually first. (http://urwid.org/)
 
+pip install --upgrade pyOpenSSL
+
 pip install mitmproxy
 
 pip install mitmflib
-python-flask
+apt-get -y install python-flask
 
 #IMAGES (upsidedown)
 apt-get -y install libjpeg-dev
