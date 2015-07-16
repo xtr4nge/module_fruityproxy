@@ -4,11 +4,17 @@ echo "installing FruityProxy..."
 
 apt-get -y install python-pip
 apt-get -y install build-essential python-dev libffi-dev libssl-dev libxml2-dev libxslt1-dev
+apt-get -y install python-setuptools --reinstall
+
+pip install --upgrade setuptools
+
 pip install --upgrade six
 
 #https://pypi.python.org/packages/source/u/urwid/urwid-1.3.0.tar.gz # if error, install urwid manually first. (http://urwid.org/)
 
 pip install --upgrade pyOpenSSL
+
+pip install python-flask
 
 pip install mitmproxy
 
