@@ -19,7 +19,6 @@ pip install python-flask
 pip install mitmproxy
 
 pip install mitmflib
-apt-get -y install python-flask
 
 #IMAGES (upsidedown)
 apt-get -y install libjpeg-dev
