@@ -14,7 +14,7 @@ pip install --upgrade six
 
 pip install --upgrade pyOpenSSL
 
-pip install python-flask
+pip install flask
 
 pip install mitmproxy
 
