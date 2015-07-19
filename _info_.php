@@ -1,6 +1,6 @@
 <?
 $mod_name="fruityproxy";
-$mod_version="1.1";
+$mod_version="1.2";
 $mod_path="/usr/share/fruitywifi/www/modules/$mod_name";
 $mod_logs="$mod_path/includes/FruityProxy-master/logs/fruityproxy.log";
 $mod_logs_history="$mod_path/includes/logs/";

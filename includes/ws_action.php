@@ -16,9 +16,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+include "../../../config/config.php";
 require("ws.php");
 
-$ws = new WebService("admin", "admin");
+//$ws = new WebService("admin", "admin");
+$ws = new WebService($api_token);
 
 $method = $_GET["method"];
 $plugin = $_GET["plugin"];

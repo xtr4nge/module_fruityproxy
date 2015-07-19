@@ -21,9 +21,10 @@ class WebService {
 	private $global_webserver;
 	private $s;
 	private $username;
-	private $password;
+	private $token;
 	
-	public function __construct($username, $password)
+	//public function __construct($username, $password)
+	public function __construct($token)
 	{
 		
 		// Include Requests library
@@ -42,6 +43,7 @@ class WebService {
 		// Set up login user/pass
 		$this->username = $username;
 		$this->password = $password;
+		$this->token = $token;
 		
 	}
 	
