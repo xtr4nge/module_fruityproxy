@@ -179,13 +179,12 @@ if ($upload == "upload") {
 
 if ($action == "download") {
     $exec = "git clone https://github.com/xtr4nge/module_$module.git /usr/share/fruitywifi/www/modules/$module";
-    //exec("$bin_danger \"" . $exec . "\"" ); //DEPRECATED
     //exec_fruitywifi($exec);
 
-    //$exec = "wget https://github.com/xtr4nge/module_$module/archive/v$version.zip -O /usr/share/fruitywifi/www/modules/module_$module-$version.zip";
-    $exec = "wget https://raw.githubusercontent.com/xtr4nge/FruityProxy/master/plugins/$plugin.py -O /tmp/$plugin.py";
+    $exec = "wget https://raw.githubusercontent.com/xtr4nge/FruityProxy/master/plugins/$plugin.py -O FruityProxy-master/plugins/$plugin.py";
     exec_fruitywifi($exec);
-	/*
+    
+    /*
     $exec = "unzip /usr/share/fruitywifi/www/modules/module_$module-$version.zip -d /usr/share/fruitywifi/www/modules/";
     exec_fruitywifi($exec);
     $exec = "rm /usr/share/fruitywifi/www/modules/module_$module-$version.zip";
