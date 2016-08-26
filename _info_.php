@@ -1,6 +1,6 @@
 <?
 $mod_name="fruityproxy";
-$mod_version="1.2";
+$mod_version="1.3";
 $mod_path="/usr/share/fruitywifi/www/modules/$mod_name";
 $mod_logs="$mod_path/includes/FruityProxy-master/logs/fruityproxy.log";
 $mod_logs_history="$mod_path/includes/logs/";
@@ -11,8 +11,8 @@ $mod_panel="show";
 $mod_type="service";
 $mod_isup="ps aux|grep -E 'fruityproxy.py' | grep -v grep | awk '{print $2}'";
 $mod_alias="FruityProxy";
+
 # EXEC
-$bin_danger = "/usr/share/fruitywifi/bin/danger";
 $bin_mitmf = "$mod_path/includes/mitmf";
 $bin_python = "/usr/bin/python";
 $bin_rm = "/bin/rm";

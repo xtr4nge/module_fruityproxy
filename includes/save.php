@@ -1,6 +1,6 @@
 <? 
 /*
-	Copyright (C) 2013-2015 xtr4nge [_AT_] gmail.com
+	Copyright (C) 2013-2016 xtr4nge [_AT_] gmail.com
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -18,7 +18,7 @@
 ?>
 <?
 
-//include "../login_check.php";
+//include "../../../login_check.php";
 include "../../../config/config.php";
 include "../_info_.php";
 include "../../../functions.php";
@@ -79,8 +79,10 @@ if ($type == "opt_value") {
 
 if ($type == "config") {
 
-    if ($newdata != "") { $newdata = ereg_replace(13,  "", $newdata);
-        $exec = "$bin_echo '$newdata' | base64 --decode > $mod_path/includes/FruityProxy-master/fruityproxy.conf";
+    if ($newdata != "") {
+		//$newdata = ereg_replace(13,  "", $newdata); // DEPRECATED
+        $newdata = preg_replace("/[\n\r]/",  "", $newdata);
+		$exec = "$bin_echo '$newdata' | base64 --decode > $mod_path/includes/FruityProxy-master/fruityproxy.conf";
         exec_fruitywifi($exec);
         
         $exec = "$bin_dos2unix $mod_path/includes/fruityproxy/fruityproxy.conf";
@@ -94,8 +96,10 @@ if ($type == "config") {
 
 if ($type == "inject") {
 
-    if ($newdata != "") { $newdata = ereg_replace(13,  "", $newdata);
-        $exec = "$bin_echo '$newdata' | base64 --decode > $mod_path/includes/FruityProxy-master/content/InjectHTML/inject.txt";
+    if ($newdata != "") {
+		//$newdata = ereg_replace(13,  "", $newdata); // DEPRECATED
+        $newdata = preg_replace("/[\n\r]/",  "", $newdata);
+		$exec = "$bin_echo '$newdata' | base64 --decode > $mod_path/includes/FruityProxy-master/content/InjectHTML/inject.txt";
         exec_fruitywifi($exec);
         
         $exec = "$bin_dos2unix $mod_path/includes/FruityProxy-master/content/InjectHTML/inject.txt";
@@ -112,7 +116,9 @@ if ($type == "templates") {
 		
 		if ($tempname != "0") {
 			// SAVE TAMPLATE
-			if ($newdata != "") { $newdata = ereg_replace(13,  "", $newdata);
+			if ($newdata != "") {
+				//$newdata = ereg_replace(13,  "", $newdata); // DEPRECATED
+				$newdata = preg_replace("/[\n\r]/",  "", $newdata);
 				$template_path = "$mod_path/includes/MITMf/config/app_cache_poison_templates";
         		$exec = "$bin_echo '$newdata' | base64 --decode > $template_path/$tempname";
                 exec_fruitywifi($exec);
@@ -130,7 +136,6 @@ if ($type == "templates") {
 			if ($new_rename_file != "") {
 				$template_path = "$mod_path/includes/MITMf/config/app_cache_poison_templates";
 				$exec = "$bin_touch $template_path/$new_rename_file";
-				//exec("$bin_danger \"$exec\"", $output); //DEPRECATED
                 exec_fruitywifi($exec);
 
 				$tempname=$new_rename_file;
@@ -139,7 +144,6 @@ if ($type == "templates") {
 			//RENAME TEMPLATE
 			$template_path = "$mod_path/includes/MITMf/config/app_cache_poison_templates";
 			$exec = "$bin_mv $template_path/$new_rename $template_path/$new_rename_file";
-			//exec("$bin_danger \"$exec\"", $output); //DEPRECATED
             exec_fruitywifi($exec);
 
 			$tempname=$new_rename_file;
@@ -150,7 +154,6 @@ if ($type == "templates") {
 			//DELETE TEMPLATE
 			$template_path = "$mod_path/includes/MITMf/config/app_cache_poison_templates";
 			$exec = "$bin_rm $template_path/$new_rename";
-			//exec("$bin_danger \"$exec\"", $output); //DEPRECATED
             exec_fruitywifi($exec);
 		}
 	}
@@ -163,7 +166,9 @@ if ($type == "filters") {
 		
 		if ($tempname != "0") {
 			// SAVE TAMPLATE
-			if ($newdata != "") { $newdata = ereg_replace(13,  "", $newdata);
+			if ($newdata != "") {
+				//$newdata = ereg_replace(13,  "", $newdata); // DEPRECATED
+				$newdata = preg_replace("/[\n\r]/",  "", $newdata);
 				$template_path = "$mod_path/includes/filters/resources/";
         		$exec = "$bin_echo '$newdata' | base64 --decode > $template_path/$tempname";
                 exec_fruitywifi($exec);
