@@ -11,7 +11,7 @@ v1.4
 - Log filter per module has been added
 - Frontend (tab) for Screenshot plugin has been added
 - Frontend (tab) for DriftNet plugin has been added
-- Captured images/screenshots can be open in a separate window
+- Captured images/screenshots can be displayed in a separate window
 
 
 v1.3
