@@ -11,7 +11,7 @@ if (file_exists($file_login_check)) {
 // Checking POST & GET variables...
 if ($regex == 1) {
 	//regex_standard($_GET["folderName"], "../../../../msg.php", $regex_extra);
-    regex_standard($_POST["driftnet-foldername"], "../../../../msg.php", $regex_extra);
+    regex_standard($_POST["driftnet-foldername"], "../../msg.php", $regex_extra);
 }
 
 //$folderName = $_GET["folderName"];

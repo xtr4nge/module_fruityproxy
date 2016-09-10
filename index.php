@@ -91,12 +91,12 @@ include "includes/options_config.php";
 
 // Checking POST & GET variables...
 if ($regex == 1) {
-    regex_standard($_POST["newdata"], "msg.php", $regex_extra);
-    regex_standard($_GET["logfile"], "msg.php", $regex_extra);
-    regex_standard($_GET["action"], "msg.php", $regex_extra);
-    regex_standard($_GET["tempname"], "msg.php", $regex_extra);
-    regex_standard($_POST["proxy"], "msg.php", $regex_extra);
-    regex_standard($_GET["tab"], "msg.php", $regex_extra);
+    regex_standard($_POST["newdata"], "../../msg.php", $regex_extra);
+    regex_standard($_GET["logfile"], "../../msg.php", $regex_extra);
+    regex_standard($_GET["action"], "../../msg.php", $regex_extra);
+    regex_standard($_GET["tempname"], "../../msg.php", $regex_extra);
+    regex_standard($_POST["proxy"], "../../msg.php", $regex_extra);
+    regex_standard($_GET["tab"], "../../msg.php", $regex_extra);
 }
 
 $newdata = $_POST['newdata'];
@@ -104,6 +104,7 @@ $logfile = $_GET["logfile"];
 $action = $_GET["action"];
 $tempname = $_GET["tempname"];
 $proxy = $_POST["proxy"];
+$tab_name = $_GET["tab"];
 
 // DELETE LOG
 if ($logfile != "" and $action == "delete") {
@@ -577,7 +578,7 @@ Loading, please wait...
 <script>
     $('#loading').hide();
     
-    var tab_name = "<?=$_GET["tab"];?>"
+    var tab_name = "<?=$tab_name?>"
     //console.log(tab_name)
     //var index = $('#result ul a').index($('#tab-'+tab_name));
     var index = $("#result a[href='#"+tab_name+"']").parent().index();
