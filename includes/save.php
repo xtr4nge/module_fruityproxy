@@ -89,7 +89,7 @@ if ($type == "config") {
         exec_fruitywifi($exec);
     }
 
-    header('Location: ../index.php?tab=2');
+    header('Location: ../index.php?tab=tab-config');
     exit;
 
 }
@@ -106,7 +106,7 @@ if ($type == "inject") {
         exec_fruitywifi($exec);
     }
 
-    header('Location: ../index.php?tab=3');
+    header('Location: ../index.php?tab=tab-InjectHTML');
     exit;
 
 }
@@ -179,7 +179,7 @@ if ($type == "filters") {
     	}
     	
 	}
-	header("Location: ../index.php?tab=6&tempname=$tempname");
+	header("Location: ../index.php?tab=tab-filters&tempname=$tempname");
 	exit;
 }
 

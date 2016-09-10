@@ -1,6 +1,6 @@
 <? 
 /*
-	Copyright (C) 2013-2015 xtr4nge [_AT_] gmail.com
+	Copyright (C) 2013-2016 xtr4nge [_AT_] gmail.com
 
 	This program is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -173,7 +173,7 @@ if ($upload == "upload") {
 		}
 	}
 	
-	header("Location: ../index.php?tab=5");
+	header("Location: ../index.php?tab=tab-Delivery");
 	exit;
 }
 
@@ -181,10 +181,10 @@ if ($action == "download") {
     $exec = "git clone https://github.com/xtr4nge/module_$module.git /usr/share/fruitywifi/www/modules/$module";
     //exec_fruitywifi($exec);
 
-    $exec = "wget https://raw.githubusercontent.com/xtr4nge/FruityProxy/master/plugins/$plugin.py -O FruityProxy-master/plugins/$plugin.py";
+    //$exec = "wget https://github.com/xtr4nge/module_$module/archive/v$version.zip -O /usr/share/fruitywifi/www/modules/module_$module-$version.zip";
+    $exec = "wget https://raw.githubusercontent.com/xtr4nge/FruityProxy/master/plugins/$plugin.py -O /tmp/$plugin.py";
     exec_fruitywifi($exec);
-    
-    /*
+	/*
     $exec = "unzip /usr/share/fruitywifi/www/modules/module_$module-$version.zip -d /usr/share/fruitywifi/www/modules/";
     exec_fruitywifi($exec);
     $exec = "rm /usr/share/fruitywifi/www/modules/module_$module-$version.zip";

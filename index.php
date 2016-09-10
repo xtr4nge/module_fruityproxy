@@ -1,6 +1,6 @@
 <? 
 /*
-    Copyright (C) 2013-2015 xtr4nge [_AT_] gmail.com
+    Copyright (C) 2013-2016 xtr4nge [_AT_] gmail.com
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>FruityWifi</title>
+<title>FruityWiFi</title>
 <script src="../js/jquery.js"></script>
 <script src="../js/jquery-ui.js"></script>
 
@@ -50,13 +50,20 @@
                 font-weight: bold;
         }
         .divAction {
-                width: 80px;
+                width: 50px;
                 display: inline-block;
                 font-weight: bold;
         }
         .divDivision {
                 width: 16px;
                 display: inline-block;
+        }
+        
+        tab-plugin {
+            height:200px;
+            width:100%;
+            border:1px dashed;
+            border-color: #888; /* #FFF */
         }
 </style>
 <script>
@@ -89,6 +96,7 @@ if ($regex == 1) {
     regex_standard($_GET["action"], "msg.php", $regex_extra);
     regex_standard($_GET["tempname"], "msg.php", $regex_extra);
     regex_standard($_POST["proxy"], "msg.php", $regex_extra);
+    regex_standard($_GET["tab"], "msg.php", $regex_extra);
 }
 
 $newdata = $_POST['newdata'];
@@ -140,89 +148,64 @@ include "includes/options_config.php";
 
 <br>
 
-<div class="rounded-top" align="left"> &nbsp; Plugins </div>
-<div class="rounded-bottom">
-    
-    <div id="modules"></div>
-
-</div>
-
-<script type='text/javascript'>
-function sortObject(object) {
-    return Object.keys(object).sort().reduce(function (result, key) {
-        result[key] = object[key];
-        return result;
-    }, {});
-}
-function loadPlugins()
-{
-    $(document).ready(function() { 
-        $.getJSON('includes/ws_action.php?method=getModulesStatusAll', function(data) {
-            var div = document.getElementById('modules');
-            div.innerHTML = ""
-            console.log(data);
-            data = sortObject(data)
-            $.each(data, function(key, val) {
-                if (val == "enabled") {
-                    div.innerHTML = div.innerHTML + "<div class='div0'><div class='div1'>" + key + "</div><div class='divEnabled'>enabled</div><div class='divDivision'> | </div><div class='divAction'><a href='#' onclick=\"setModulesStatus('" + key + "',0)\">stop</a></div></div>";
-                } else {
-                    div.innerHTML = div.innerHTML + "<div class='div0'><div class='div1'>" + key + "</div><div class='divDisabled'>disabled</div><div class='divDivision'> | </div><div class='divAction'><a href='#' onclick=\"setModulesStatus('" + key + "',1)\">start</a></div></div>";
-                }
-                    
-            });
-        });    
-    
-    });
-}
-loadPlugins()
-
-function setModulesStatus(module, action) {
-    $(document).ready(function() { 
-        $.getJSON('includes/ws_action.php?method=setModulesStatus&module=' + module + '&action=' + action, function(data) {
-        });
-        /*
-        $.postJSON = function(url, data, func)
-        {
-            $.post(url, data, func, 'json');
-        }
-        */
-    });
-    setTimeout(loadPlugins, 500);
-}
-
-</script>
-
-<br>
-
 <div id="msg" style="font-size:largest;">
 Loading, please wait...
 </div>
 
 <div id="body" style="display:none;">
-
+<!--
+<a href="#" onclick='loadContent()'>loadContent</a>
+-->
 <div id="result" class="module">
     <ul>
-        <li><a href="#result-1">Output</a></li>
-        <li><a href="#result-2">History</a></li>
-        <li><a href="#result-4">Config</a></li>
-        <li><a href="#result-3">Inject</a></li>
-        <li><a href="#result-6">Filters</a></li>
-        <li><a href="#result-7">Delivery</a></li>
-		<li><a href="#result-8">Plugins</a></li>
-        <li><a href="#result-9">About</a></li>
+        <li><a href="#tab-output">Output</a></li>
+        <li><a href="#tab-history">History</a></li>
+        <li><a href="#tab-plugins">Plugins</a></li>
+        <li><a href="#tab-config">Config</a></li>
+        <li><a href="#tab-install">Install</a></li>
+        <li><a href="#tab-about">About</a></li>
+        <?
+        // ADD PLUGINS TABS (plugins name)
+        $dir    = 'includes/tabs/';
+        $plugin_file = scandir($dir);
+        
+        for ($i=0; $i < count($plugin_file); $i++) {
+                if ($plugin_file[$i] != "." and $plugin_file[$i] != "..") {
+                        $plugin_name = str_replace(".php","",$plugin_file[$i]);
+                        //echo $plugin_name;
+                        echo "<li><a href='#tab-$plugin_name'>$plugin_name</a></li>";
+                }
+        }
+        ?>
     </ul>
     
     <!-- OUTPUT -->
     
-    <div id="result-1">
+    <div id="tab-output">
         <form id="formLogs-Refresh" name="formLogs-Refresh" method="GET" autocomplete="off" action="includes/save.php">
-        <input type="submit" value="refresh">
+        <input c-lass="module" type="submit" value="refresh">
         <input type="hidden" name="mod_service" value="mod_sslstrip_filter">
-        <select style="module" name="mod_action" onchange='this.form.submit()'>
+        <select c-lass="module" name="mod_action" onchange='this.form.submit()'>
             <option value="" <? if ($mod_sslstrip_filter == "") echo 'selected'; ?> >-</option>
-            <option value="LogEx.py" <? if ($mod_sslstrip_filter == "LogEx.py") echo 'selected'; ?>>LogEx.py</option>
-            <option value="ParseLog.py" <? if ($mod_sslstrip_filter == "ParseLog.py") echo 'selected'; ?>>ParseLog.py</option>
+            <?
+                $plugins_path = "$mod_path/includes/FruityProxy-master/plugins/";
+                $plugins = glob("$plugins_path".'*.py');
+                $output = $plugins;
+            
+                for ($i=0; $i < count($output); $i++) {
+                    
+                    $filename = str_replace(".py","",str_replace($plugins_path,"",$plugins[$i]));
+                    
+                    if ($mod_sslstrip_filter == $filename) $selected = 'selected'; else $selected = "";
+                    
+                    if ($filename != "plugin" and $filename != "__init__") {
+                        echo "<option value='$filename' $selected>$filename</option>";                            
+                    }
+                    $mod_installed[$i] = $filename;
+                }
+            ?>
         </select>
+        
         <br><br>
         <?
             if ($logfile != "" and $action == "view") {
@@ -250,14 +233,18 @@ Loading, please wait...
                 $data_array = explode("\n", $data);
                 //$data = implode("\n",array_reverse($data_array));
                 //$data = array_reverse($data_array);
-                $data = $data_array;
+                //$data = $data_array;
+                unset($data);
+                $exec = "cat $filename | grep '\[Screenshot\]'";
+                $exec = "cat $filename | grep '$mod_sslstrip_filter'";
+                exec($exec, $data);
                 
                 //exec("/usr/bin/tail -n 100 $filename", $data_array);
                 //$data = $data_array;
             }
         
         ?>
-        <textarea id="output" class="module-content" style="font-family: courier;"><?
+        <textarea id="output" class="module-content" style="font-family: monospace, courier;"><?
             //htmlentities($data)
         
             for ($i=0; $i < count($data); $i++) {
@@ -273,9 +260,11 @@ Loading, please wait...
         </form>
     </div>
     
+    <!-- END OUTPUT -->
+    
     <!-- HISTORY -->
     
-    <div id="result-2" class="history">
+    <div id="tab-history" class="history">
         <input type="submit" value="refresh">
         <br><br>
         
@@ -294,34 +283,76 @@ Loading, please wait...
         
     </div>
     
-    <!-- INJECT -->
+    <!-- END HISTORY -->
     
-    <div id="result-3" >
-        <form id="formInject" name="formInject" method="POST" autocomplete="off" action="includes/save.php">
-        <input type="submit" value="save">
-        <br><br>
-        <?
-            $filename = "$mod_path/includes/FruityProxy-master/content/InjectHTML/inject.txt";
+    <!-- PLUGINS -->
+    
+    <div id="tab-plugins" class="history">
+        
+        <div class="rounded-top" align="left"> &nbsp; Plugins </div>
+        <div class="rounded-bottom">
             
-            /*
-            if ( 0 < filesize( $filename ) ) {
-                $fh = fopen($filename, "r"); // or die("Could not open file.");
-                $data = fread($fh, filesize($filename)); // or die("Could not read file.");
-                fclose($fh);
-            }
-            */
-            
-            $data = open_file($filename);
-            
-        ?>
-        <textarea id="inject" name="newdata" class="module-content" style="font-family: courier;"><?=htmlspecialchars($data)?></textarea>
-        <input type="hidden" name="type" value="inject">
-        </form>
+            <div id="modules"></div>
+        
+        </div>
+        
+        <script type='text/javascript'>
+        function sortObject(object) {
+            return Object.keys(object).sort().reduce(function (result, key) {
+                result[key] = object[key];
+                return result;
+            }, {});
+        }
+        function loadPlugins()
+        {
+            $(document).ready(function() { 
+                $.getJSON('includes/ws_action.php?method=getModulesStatusAll', function(data) {
+                    var div = document.getElementById('modules');
+                    div.innerHTML = ""
+                    console.log(data);
+                    data = sortObject(data)
+                    $.each(data, function(key, val) {
+                        if (val == "enabled") {
+                            div.innerHTML = div.innerHTML + "<div class='div0'><div class='div1'>" + key + "</div><div class='divEnabled'>enabled</div><div class='divDivision'> | </div><div class='divAction'><a href='#' onclick=\"setModulesStatus('" + key + "',0)\">stop</a></div><a href='#' onclick='loadContent()'>view</a></div>";
+                        } else {
+                            div.innerHTML = div.innerHTML + "<div class='div0'><div class='div1'>" + key + "</div><div class='divDisabled'>disabled</div><div class='divDivision'> | </div><div class='divAction'><a href='#' onclick=\"setModulesStatus('" + key + "',1)\">start</a></div>view</div>";
+                        }
+                            
+                    });
+                })
+                /*
+                .fail(function() { console.log("fail"); })
+                .success(function() { console.log("success"); })
+                .error(function() { console.log("error"); })
+                .complete(function() { console.log("complete"); })
+                */
+                ;
+            });
+        }
+        loadPlugins()
+        
+        function setModulesStatus(module, action) {
+            $(document).ready(function() { 
+                $.getJSON('includes/ws_action.php?method=setModulesStatus&module=' + module + '&action=' + action, function(data) {
+                });
+                /*
+                $.postJSON = function(url, data, func)
+                {
+                    $.post(url, data, func, 'json');
+                }
+                */
+            });
+            setTimeout(loadPlugins, 500);
+        }
+        
+        </script>
+        
     </div>
+    <!-- END PLUGINS -->
     
     <!-- CONFIG -->
     
-    <div id="result-4" >
+    <div id="tab-config" >
         <form id="formConfig" name="formTamperer" method="POST" autocomplete="off" action="includes/save.php">
         <input type="submit" value="save">
         <br><br>
@@ -331,114 +362,14 @@ Loading, please wait...
             $data = open_file($filename);
             
         ?>
-        <textarea id="config" name="newdata" class="module-content" style="font-family: courier;"><?=htmlspecialchars($data)?></textarea>
+        <textarea id="config" name="newdata" class="module-content" style="font-family: monospace, courier;"><?=htmlspecialchars($data)?></textarea>
         <input type="hidden" name="type" value="config">
         </form>
     </div>
-    
-    <!-- START FILTERS -->
-    
-    <div id="result-6" >
-        <form id="formFilters" name="formFilters" method="POST" autocomplete="off" action="includes/save.php">
-        <input type="submit" value="save"> [ParseLog.py]
-        
-        <br><br>
-        <?
-        	if ($tempname != "") {
-            	$filename = "$mod_path/includes/filters/resources/$tempname";
-                
-                $data = open_file($filename);
-                
-			} else {
-				$data = "";
-			}
-			
-            
-            
-        ?>
-        <textarea id="inject" name="newdata" class="module-content" style="font-family: courier;"><?=htmlspecialchars($data)?></textarea>
-        <input type="hidden" name="type" value="filters">
-        <input type="hidden" name="action" value="save">
-        <input type="hidden" name="tempname" value="<?=$tempname?>">
-        </form>
-        
-    <br>
-        
-    <table border=0 cellspacing=0 cellpadding=0>
-    	<tr>
-    	<td class="general" style="padding-right:10px">
-    		Setup  
-    	</td>
-    	<td>
-        <form id="formFilters" name="formFilters" method="POST" autocomplete="off" action="includes/save.php">
-    		<select name="tempname" onchange='this.form.submit()'>
-        	<option value="0">-</option>
-        	<?
-        	$template_path = "$mod_path/includes/filters/resources/";
-        	$templates = glob($template_path.'*');
-        	//print_r($templates);
 
-        	for ($i = 0; $i < count($templates); $i++) {
-            	$filename = str_replace($template_path,"",$templates[$i]);
-            	if ($filename == $tempname) echo "<option selected>"; else echo "<option>"; 
-            	echo "$filename";
-            	echo "</option>";
-        	}
-        	?>
-        	</select>
-        	<input type="hidden" name="type" value="filters">
-        	<input type="hidden" name="action" value="select">
-    	</form>
-        </td>
-        
-    </table>
-    </div>
-    
-    <!-- END FILTERS -->
-	
-    <!-- DELIVERY -->
-        
-        <div id="result-7" class="module-options">
-            <form action="includes/module_action.php" method="post" enctype="multipart/form-data">
-                extensions: [doc, docm, xls, xlsm, pdf, hta, chm] <br><br>
-                <input type="file" name="fileToUpload" id="fileToUpload">
-                <br>
-                <input type="submit" value="upload" name="submit">
-                <input type="hidden" name="upload" value="upload">
-            </form>
-            <br>
-            <?
-            /*
-            foreach (glob("includes/uploads/*") as $filename) {
-                echo "$filename size " . filesize($filename) . "<br>";
-            }
-            */
-            
-            echo "<b>Uploaded Files:</b><br>";
-            
-            $files_path = "includes/FruityProxy-master/content/Delivery/";
-            
-            if (!file_exists($files_path)) {
-                $exec = "mkdir -p $files_path";
-                exec_fruitywifi($exec);
-            }
-            
-            
-            $files = glob($files_path.'*');
-            
-            for ($i = 0; $i < count($files); $i++) {
-                $filename = str_replace($files_path,"",$files[$i]);
-                echo "- $filename<br>";
-            }
-            
-            ?>
-        </div>
-        
-    <!-- END DELIVERY -->
-    
-    <!-- PLUGINS -->
+    <!-- INSTALL -->
 
-	<div id="result-8" class="history">
+	<div id="tab-install" class="history">
         
         <script>
         function openDialog(action, plugin, version) {
@@ -459,7 +390,7 @@ Loading, please wait...
         }
         </script>
         
-        <? include "menu.php" ?>
+        <? //include "menu.php" ?>
         
         <div id="dialog" title="Wait" style="vertical-align: middle; text-align: center; visibility: hidden"></div>
         <div id="data" title="Basic dialog" style="visibility: hidden"></div>
@@ -506,7 +437,7 @@ Loading, please wait...
         
         
         <div class="rounded-top" align="center"> Installed Plugins </div>
-        <div class="rounded-bottom" style="font-family: monospace; font-size: 12px">
+        <div class="rounded-bottom" style="font-family: monospace, courier; font-size: 12px">
             <table border=0 width='100%' cellspacing=0 cellpadding=0>
             <?
             
@@ -547,168 +478,118 @@ Loading, please wait...
         <br>
         
         <div class="rounded-top" align="center"> Available Plugins </div>
-        <div class="rounded-bottom" style="w-idth:400px; font-family: monospace; font-size: 12px">
-        
-            <table border=0 width='100%' cellspacing=0 cellpadding=0>
+            <div class="rounded-bottom" style="w-idth:400px; font-family: monospace, courier; font-size: 12px">
             
-            <?
-            $url = "https://raw.github.com/xtr4nge/FruityProxy/master/plugins.xml";
-        
-            // VERIFY INTERNET CONNECTION
-            if (isset($_GET["show"])) {
-                $external_ip = exec("curl ident.me");
-                if ($external_ip != "" and isset($_GET["show"])) {
-                    $xml = simplexml_load_file($url);
-                }
-            }
+                <table border=0 width='100%' cellspacing=0 cellpadding=0>
+                
+                <?
+                $url = "https://raw.github.com/xtr4nge/FruityProxy/master/plugins.xml";
             
-            if (count($xml) > 0 and $xml != "" and isset($_GET["show"])) {
-                for ($i=0;$i < count($xml); $i++) {
-                    
-                    echo "<div style='height:22px;'>";
-                    echo "<div style='display:inline-block; width:120px; text-align:left;'>".$xml->plugin[$i]->name."</div>";
-                    echo "<div style='display:inline-block; width:30px; text-align:left; padding-left:10px;'>".$xml->plugin[$i]->version."</div>";
-                    echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:6px;'> | </div>";
-                    //echo "<div style='display:inline-block; width:50px; text-align:left; padding-left:20px;'>".$xml->plugin[$i]->author."</div>";
-                    //echo "<div style='display:inline-block; width:48px; text-align:right; padding-left:2px;'></div>";
-                    //echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:6px;'> | </div>";
-                    
-                    if (count($mod_installed) == 0) $mod_installed[0] = "";
-                    
-                    if (in_array($xml->plugin[$i]->name,$mod_installed)) {
-                        echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:4px;'>installed</div>";
-                    } else {
-                        if (str_replace("v","",$version) < $xml->plugin[$i]->required ) {
-                            echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:4px;'><a href='#' onclick='alert(\"FruityWifi v".$xml->plugin[$i]->required." is required\")'>install</a></div>";
-                        } else {
-                            echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:4px;'><a href='javascript:void(0)' onclick=\"openDialog('download','".$xml->plugin[$i]->name."','".$xml->plugin[$i]->version."');\">install</a></div>";
-                            //echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:4px;'><a href='includes/module_action.php?action=download&plugin=".$xml->plugin[$i]->name."'>install</a></div>";
-                        }
+                // VERIFY INTERNET CONNECTION
+                if (isset($_GET["show"])) {
+                    $external_ip = exec("curl ident.me");
+                    if ($external_ip != "" and isset($_GET["show"])) {
+                        $xml = simplexml_load_file($url);
                     }
-                    echo "</div>";
-                    
                 }
-            } else {
-                    echo "<a style='color:#FF0000' href='?show&tab=6'>List available plugins </a> <br>";
-                    echo "This will establish a connection to github.com/xtr4nge";
-            }
-        
-            ?>
-        
-            </table>
-        </div>
+                
+                if (count($xml) > 0 and $xml != "" and isset($_GET["show"])) {
+                    for ($i=0;$i < count($xml); $i++) {
+                        
+                        echo "<div style='height:22px;'>";
+                        echo "<div style='display:inline-block; width:120px; text-align:left;'>".$xml->plugin[$i]->name."</div>";
+                        echo "<div style='display:inline-block; width:30px; text-align:left; padding-left:10px;'>".$xml->plugin[$i]->version."</div>";
+                        echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:6px;'> | </div>";
+                        //echo "<div style='display:inline-block; width:50px; text-align:left; padding-left:20px;'>".$xml->plugin[$i]->author."</div>";
+                        //echo "<div style='display:inline-block; width:48px; text-align:right; padding-left:2px;'></div>";
+                        //echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:6px;'> | </div>";
+                        
+                        if (count($mod_installed) == 0) $mod_installed[0] = "";
+                        
+                        if (in_array($xml->plugin[$i]->name,$mod_installed)) {
+                            echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:4px;'>installed</div>";
+                        } else {
+                            if (str_replace("v","",$version) < $xml->plugin[$i]->required ) {
+                                echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:4px;'><a href='#' onclick='alert(\"FruityWifi v".$xml->plugin[$i]->required." is required\")'>install</a></div>";
+                            } else {
+                                echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:4px;'><a href='javascript:void(0)' onclick=\"openDialog('download','".$xml->plugin[$i]->name."','".$xml->plugin[$i]->version."');\">install</a></div>";
+                                //echo "<div style='display:inline-block; width:10px; text-align:left; padding-left:4px;'><a href='includes/module_action.php?action=download&plugin=".$xml->plugin[$i]->name."'>install</a></div>";
+                            }
+                        }
+                        echo "</div>";
+                        
+                    }
+                } else {
+                        echo "<a style='color:#FF0000' href='?show&tab=tab-install'>List available plugins </a> <br>";
+                        echo "This will establish a connection to github.com/xtr4nge";
+                }
+            
+                ?>
+            
+                </table>
+            </div>
 
 	</div>
 	
-	<!-- END PLUGINS -->
+	<!-- END INSTALL -->
     
 	<!-- ABOUT -->
 
-	<div id="result-9" class="history">
+	<div id="tab-about" class="history">
 		<? include "includes/about.php"; ?>
 	</div>
 	
 	<!-- END ABOUT -->
     
+    <!-- PLUGINS -->
+        <?
+        // ADD PLUGINS TABS (plugins name)
+        $dir    = 'includes/tabs/';
+        $plugin_file = scandir($dir);
+        
+        for ($i_plugin=0; $i_plugin < count($plugin_file); $i_plugin++) {
+                if ($plugin_file[$i_plugin] != "." and $plugin_file[$i_plugin] != "..") {
+                        $plugin_name = str_replace(".php","",$plugin_file[$i_plugin]);
+                        
+                        echo "<div id='tab-$plugin_name' class='history'>";
+                        //echo "<iframe id='plugin$plugin_name' src='includes/tabs/$plugin_name.php' class='module-content' style='font-family: courier;'></iframe>";
+                        
+                        include "includes/tabs/$plugin_name.php";
+                        
+                        echo "</div>";
+                        
+                        
+                }
+        }
+        ?>
+    <!-- END PLUGINS -->
     
 </div>
+
+<?php
+//include "includes/tabs/DriftNet.php";
+?>
 
 <div id="loading" class="ui-widget" style="width:100%;background-color:#000; padding-top:4px; padding-bottom:4px;color:#FFF">
     Loading...
 </div>
 
 <script>
-$('#formLogs').submit(function(event) {
-    event.preventDefault();
-    $.ajax({
-        type: 'POST',
-        url: 'includes/ajax.php',
-        data: $(this).serialize(),
-        dataType: 'json',
-        success: function (data) {
-            console.log(data);
-
-            $('#output').html('');
-            $.each(data, function (index, value) {
-                $("#output").append( value ).append("\n");
-            });
-            
-            $('#loading').hide();
-        }
-    });
+    $('#loading').hide();
     
-    $('#output').html('');
-    $('#loading').show()
-
-});
-
-$('#loading').hide();
-
-</script>
-
-<script>
-$('#form1').submit(function(event) {
-    event.preventDefault();
-    $.ajax({
-        type: 'POST',
-        url: 'includes/ajax.php',
-        data: $(this).serialize(),
-        dataType: 'json',
-        success: function (data) {
-            console.log(data);
-
-            $('#output').html('');
-            $.each(data, function (index, value) {
-                if (value != "") {
-                    $("#output").append( value ).append("\n");
-                }
-            });
-            
-            $('#loading').hide();
-
-        }
-    });
-    
-    $('#output').html('');
-    $('#loading').show()
-
-});
-
-$('#loading').hide();
-
-</script>
-
-<script>
-$('#formInject2').submit(function(event) {
-    event.preventDefault();
-    $.ajax({
-        type: 'POST',
-        url: 'includes/ajax.php',
-        data: $(this).serialize(),
-        dataType: 'json',
-        success: function (data) {
-            console.log(data);
-
-            $('#inject').html('');
-            $.each(data, function (index, value) {
-                $("#inject").append( value ).append("\n");
-            });
-            
-            $('#loading').hide();
-            
-        }
-    });
-    
-    $('#output').html('');
-    $('#loading').show()
-
-});
-
-$('#loading').hide();
-
+    var tab_name = "<?=$_GET["tab"];?>"
+    //console.log(tab_name)
+    //var index = $('#result ul a').index($('#tab-'+tab_name));
+    var index = $("#result a[href='#"+tab_name+"']").parent().index();
+    //console.log(index)
+    if (index >= 0) {
+        $( '#result' ).tabs({ active: index });
+    }
 </script>
 
 <?
+//var index = $('#tabs ul').index($('#tabId'));
+/*
 if ($_GET["tab"] == 1) {
 	echo "<script>";
 	echo "$( '#result' ).tabs({ active: 1 });";
@@ -742,6 +623,7 @@ if ($_GET["tab"] == 1) {
 	echo "$( '#result' ).tabs({ active: 8 });";
 	echo "</script>";
 }
+*/
 ?>
 
 </div>
@@ -752,6 +634,21 @@ $(document).ready(function() {
     $('#msg').hide();
 });
 </script>
+
+<script type="text/javascript">
+function loadContent() {
+    $( '#result' ).tabs({ active: 8 });
+    //document.getElementById('pluginContent').src = "includes/list_folders.php";
+    document.getElementById('pluginContent').src = "includes/FruityProxy-master/content/DriftNet/list_folders.php";
+}
+
+</script>
+
+<script type="text/javascript"> 
+function PopupPic(sPicURL) { 
+    window.open( "includes/show_image.php?"+sPicURL, "FruityProxy", "resizable=1,height=200,width=200"); 
+} 
+</script> 
 
 </body>
 </html>
