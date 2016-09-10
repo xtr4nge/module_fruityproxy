@@ -1,6 +1,6 @@
 <?
 // CHECK LOGIN
-$file_login_check = "../../login_check.php";
+$file_login_check = "../../../../login_check.php";
 
 if (file_exists($file_login_check)) {
 	include $file_login_check;
