@@ -30,7 +30,7 @@ unzip FruityProxy-master.zip
 
 chmod 755 ./fruityproxy.sh
 
-ln -s /usr/share/fruitywifi/www/modules/bdfproxy/includes/bdf-proxy/bdf/ /usr/share/fruitywifi/www/modules/fruityproxy/includes/FruityProxy-master/modules/bdf
+#ln -s /usr/share/fruitywifi/www/modules/bdfproxy/includes/bdf-proxy/bdf/ /usr/share/fruitywifi/www/modules/fruityproxy/includes/FruityProxy-master/modules/bdf
 
 echo "..DONE.."
 exit
